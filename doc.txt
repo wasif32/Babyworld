@@ -1,0 +1,45 @@
+2. Plan the Game Mechanics
+Core Features:
+
+Air Pump Mechanism: Add a button that increases the balloon size when clicked.
+Flying Effect: When fully inflated, the balloon should start moving randomly in different directions.
+Burst on Tap: Allow the player to click/tap on the balloon to burst it.
+
+Phaser.js: A popular HTML5 game framework with built-in support for physics, animations, and interactions.
+
+ Steps to Implement
+a. Air Pump Mechanism
+Add a button for pumping air.
+Increase the balloon size incrementally with each button press.
+Set a size threshold for when the balloon is "fully inflated."
+b. Balloon Flying Animation
+Use CSS animations or JavaScript setInterval/requestAnimationFrame to move the balloon in random directions once inflated.
+c. Burst on Tap
+Add an event listener to the balloon for the click event.
+Replace the balloon graphic with a "burst" graphic and play a sound effect (if provided).
+Optionally, remove the balloon from the screen after bursting.
+d. Graphics Integration
+Use the provided assets for the balloon, air pump, and burst animation.
+If needed, create additional graphics or use online free assets.
+e. Game Over/Restart Mechanism (Optional)
+Display a message when the balloon bursts.
+Provide a reset button to restart the game.
+
+
+/assets
+    - balloon.png
+    - burst.png
+    - pump.png
+/css
+    - styles.css
+/js
+    - script.js
+index.html
+
+raphics Editor: Use Photoshop, GIMP, or Figma if you need to tweak any assets.
+Sound Effects: Add fun popping sound effects (e.g., from freesound.org).
+Hosting (Optional): Deploy the game prototype on GitHub Pages or Netlify for easy sharing.
+
+7. Time Management
+Day 1: Implement air pump, balloon inflation, and movement mechanics.
+Day 2: Add the burst functionality, polish graphics, test, and package for submission.

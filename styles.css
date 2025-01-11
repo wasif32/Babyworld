@@ -1,0 +1,12 @@
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevents scrollbars */
+  height: 100vh; /* Full height */
+  background: url("assets/background.png") no-repeat center center fixed;
+  background-size: cover; /* Ensures background image covers entire screen */
+}
+
+canvas {
+  display: block;
+}

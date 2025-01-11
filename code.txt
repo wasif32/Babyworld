@@ -1,0 +1,154 @@
+const config = {
+  type: Phaser.AUTO,
+  width: window.innerWidth,
+  height: window.innerHeight,
+  physics: {
+    default: "arcade",
+    arcade: {
+      gravity: { y: 0 },
+    },
+  },
+  scene: {
+    preload,
+    create,
+    update,
+  },
+};
+
+const game = new Phaser.Game(config);
+
+let handle = null;
+let pump = null;
+let blower = null;
+let currentPumpCount = 0;
+
+function preload() {
+  this.load.image("background", "assets/background.png");
+  this.load.image("pump", "assets/pump.png");
+  this.load.image("handle", "assets/handle.png");
+  this.load.image("blower", "assets/blower.png");
+
+  for (let i = 100001; i <= 100010; i++) {
+    this.load.image(`balloon${i}`, `assets/Symbol ${i}.png`);
+  }
+
+  for (let i = 10001; i <= 10026; i++) {
+    this.load.image(`Alphabet${i}`, `assets/Symbol ${i}.png`);
+  }
+}
+
+function create() {
+  // Set up background
+  this.add
+    .image(0, 0, "background")
+    .setOrigin(0, 0)
+    .setScale(config.width / 800, config.height / 600);
+
+  // Set up handle, blower, and pump
+  handle = this.physics.add
+    .image(1235, 384, "handle")
+    .setScale(0.4)
+    .setInteractive();
+  pump = this.add.image(1235, 520, "pump").setScale(0.4);
+  blower = this.add.image(1124, 506, "blower").setScale(0.4);
+
+  // Handle interaction
+  handle.on("pointerdown", () => {
+    this.tweens.add({
+      targets: handle,
+      y: 450,
+      ease: "Sine.easeInOut",
+      duration: 250,
+      yoyo: true,
+      onStart: () => {
+        this.tweens.add({
+          targets: pump,
+          scaleY: 0.35,
+          ease: "Sine.easeInOut",
+          duration: 250,
+          yoyo: true,
+        });
+        this.tweens.add({
+          targets: blower,
+          y: 516,
+          ease: "Sine.easeInOut",
+          duration: 250,
+          yoyo: true,
+        });
+        inflateBalloon(this);
+      },
+    });
+  });
+}
+
+function inflateBalloon(scene) {
+  currentPumpCount++;
+  if (currentPumpCount === 1) {
+    // Create a new balloon on the first pump
+    createBalloon(scene);
+  }
+
+  // Inflate all balloons currently on the screen
+  scene.children.list.forEach((child) => {
+    if (child.texture.key.startsWith("balloon")) {
+      scene.tweens.add({
+        targets: child,
+        scaleX: child.scaleX + 0.05, // Gradual inflation
+        scaleY: child.scaleY + 0.05,
+        y: child.y - 5, // Slight vertical movement
+        ease: "Sine.easeInOut",
+        duration: 250,
+      });
+    }
+  });
+
+  // After 3 pumps, make the most recently created balloon fly away
+  if (currentPumpCount >= 3) {
+    currentPumpCount = 0; // Reset pump count
+    flyBalloonAway(scene);
+  }
+}
+
+function createBalloon(scene) {
+  const balloonImage = `balloon${Phaser.Math.Between(100001, 100010)}`;
+  const balloon = scene.physics.add
+    .image(1074, 430, balloonImage) // Start position near the blower
+    .setScale(0.1) // Smaller initial size
+    .setInteractive()
+    .setCollideWorldBounds(true) // Keep within screen bounds
+    .setBounce(1); // Bounce on hitting bounds
+
+  balloon.on("pointerdown", () => {
+    balloon.destroy(); // Allow the player to pop the balloon
+  });
+
+  // Animation to grow the balloon and make it rise
+  scene.tweens.add({
+    targets: balloon,
+    x: 1074, // Keep horizontal position aligned with the blower
+    y: 394, // Move upwards slightly above the blower
+    scaleX: 0.2, // Final inflated size
+    scaleY: 0.2,
+    ease: "Sine.easeInOut",
+    duration: 2000,
+  });
+
+  // Set the depth of the balloon to ensure it's above the blower
+  balloon.setDepth(3);
+}
+
+function flyBalloonAway(scene) {
+  const balloons = scene.children.list.filter((child) =>
+    child.texture.key.startsWith("balloon")
+  );
+
+  if (balloons.length > 0) {
+    const balloon = balloons[balloons.length - 1]; // Target the most recently created balloon
+    const randomVelocityX = Phaser.Math.Between(-100, 100); // Slower horizontal velocity
+    const randomVelocityY = Phaser.Math.Between(-150, -300); // Slower vertical velocity
+    balloon.body.setVelocity(randomVelocityX, randomVelocityY);
+    balloon.setInteractive(false); // Disable popping while flying away
+  }
+}
+
+function update() {}
