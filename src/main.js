@@ -54,8 +54,8 @@ function create() {
     .image(1235, 384, "handle")
     .setScale(0.4)
     .setInteractive();
-  pump = this.add.image(1235, 520, "pump").setScale(0.4);
-  blower = this.add.image(1124, 506, "blower").setScale(0.4);
+  pump = this.add.image(1235, 520, "pump").setScale(0.4).setDepth(1);
+  blower = this.add.image(1124, 506, "blower").setScale(0.4).setDepth(1);
 
   // Set world bounds
   this.physics.world.setBounds(0, 0, config.width, config.height);
@@ -103,8 +103,8 @@ function inflateBalloon(scene) {
   scene.children.list.forEach((child) => {
     if (child instanceof Phaser.GameObjects.Container) {
       // Generate random velocity in both X and Y directions
-      const randomVelocityX = Phaser.Math.Between(-2, 2); // Random horizontal movement (-2 to 2 pixels)
-      const randomVelocityY = Phaser.Math.Between(-2, 2); // Random vertical movement (-2 to 2 pixels)
+      const randomVelocityX = Phaser.Math.Between(-40, 2); // Random horizontal movement (-2 to 2 pixels)
+      const randomVelocityY = Phaser.Math.Between(-1, 1); // Random vertical movement (-2 to 2 pixels)
 
       child.body.setVelocityX(child.body.velocity.x + randomVelocityX); // Apply random X velocity
       child.body.setVelocityY(child.body.velocity.y + randomVelocityY); // Apply random Y velocity
@@ -138,6 +138,7 @@ function createBalloon(scene) {
   // Group them into a container
   const balloonContainer = scene.add.container(1074, 433, [balloon, alphabet]);
   balloonContainer.setScale(0.1);
+  balloonContainer.setDepth(10);
   scene.physics.world.enable(balloonContainer); // Add physics to the container
 
   // Ensure container does not go outside the world bounds
