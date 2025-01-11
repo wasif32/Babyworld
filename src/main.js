@@ -36,6 +36,10 @@ function preload() {
   for (let i = 10001; i <= 10026; i++) {
     this.load.image(`Alphabet${i}`, `assets/Symbol ${i}.png`);
   }
+  // Load background music
+  this.load.audio("bgMusic", "assets/Carefree.mp3");
+
+  this.load.audio("burstSound", "assets/pop.mp3"); // Balloon burst sound
 }
 
 function create() {
@@ -83,6 +87,9 @@ function create() {
       },
     });
   });
+  // Play background music
+  const bgMusic = this.sound.add("bgMusic", { loop: true, volume: 0.5 }); // Adjust volume if needed
+  bgMusic.play();
 }
 
 function inflateBalloon(scene) {
@@ -129,7 +136,7 @@ function createBalloon(scene) {
   const alphabet = scene.add.image(0, -6, alphabetImage).setScale(0.3); // Positioned above the balloon
 
   // Group them into a container
-  const balloonContainer = scene.add.container(1074, 430, [balloon, alphabet]);
+  const balloonContainer = scene.add.container(1074, 433, [balloon, alphabet]);
   balloonContainer.setScale(0.1);
   scene.physics.world.enable(balloonContainer); // Add physics to the container
 
@@ -161,6 +168,10 @@ function createBalloon(scene) {
 }
 
 function burstBalloon(scene, balloonContainer) {
+  // Play balloon burst sound
+  const burstSound = scene.sound.add("burstSound");
+  burstSound.play();
+
   // Create burst effect (optional, e.g., a quick scaling or rotation animation)
   scene.tweens.add({
     targets: balloonContainer,
