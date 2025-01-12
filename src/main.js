@@ -28,6 +28,7 @@ function preload() {
   this.load.image("pump", "assets/pump.png");
   this.load.image("handle", "assets/handle.png");
   this.load.image("blower", "assets/blower.png");
+  this.load.image("thread", "assets/thread.png");
 
   for (let i = 100001; i <= 100010; i++) {
     this.load.image(`balloon${i}`, `assets/Symbol ${i}.png`);
@@ -134,9 +135,14 @@ function createBalloon(scene) {
   // Create the balloon and alphabet
   const balloon = scene.add.image(0, 0, balloonImage).setScale(0.5);
   const alphabet = scene.add.image(0, -6, alphabetImage).setScale(0.3); // Positioned above the balloon
+  const thread = scene.add.image(6, 146, "thread").setScale(0.5); // Positioned below the balloon
 
   // Group them into a container
-  const balloonContainer = scene.add.container(1074, 433, [balloon, alphabet]);
+  const balloonContainer = scene.add.container(1074, 433, [
+    balloon,
+    alphabet,
+    thread,
+  ]);
   balloonContainer.setScale(0.1);
   balloonContainer.setDepth(10);
   scene.physics.world.enable(balloonContainer); // Add physics to the container
